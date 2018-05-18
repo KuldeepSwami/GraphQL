@@ -1,0 +1,8 @@
+query CreateTodo($id : Int!, $itemName : String!, $isCompleted : Boolean!)
+{
+  createTodo(itemId:$id, item : $itemName, completed : $isCompleted){
+    item
+    itemId
+    completed
+  }
+}

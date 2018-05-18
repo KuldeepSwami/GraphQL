@@ -1,0 +1,10 @@
+query UpdateTodo($itemId : Int!, $itemName : String!, $isCompleted : Boolean!)
+{
+  updateTodo(itemId : $itemId,  item : $itemName, completed : $isCompleted){
+
+    item
+    itemId
+    completed
+
+  }
+}

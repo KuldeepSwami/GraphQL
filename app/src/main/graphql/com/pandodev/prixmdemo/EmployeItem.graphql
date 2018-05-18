@@ -1,0 +1,11 @@
+query MyTestData
+{
+
+
+  getTodo{
+
+    item
+    itemId
+    completed
+  }
+}

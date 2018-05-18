@@ -1,0 +1,10 @@
+query DeleteTodo($id : Int!)
+{
+
+
+  removeTodo(itemId:$id){
+    item
+    itemId
+    completed
+  }
+}
