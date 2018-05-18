@@ -25,7 +25,7 @@ public class MyApplication extends Application {
 
 
     private static final String SQL_CACHE_NAME = "prismdemo";
-    private static final String BASE_URL = "http://192.169.139.127:8009/graphql";
+    private static final String BASE_URL = "http://serveraddress:8009/graphql";
 
     private ApolloClient apolloClient;
 
