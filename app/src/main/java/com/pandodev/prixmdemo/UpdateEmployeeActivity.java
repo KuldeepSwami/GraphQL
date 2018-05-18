@@ -1,5 +1,6 @@
 package com.pandodev.prixmdemo;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 
 public class UpdateEmployeeActivity extends AppCompatActivity {
 
-
+    ProgressDialog progressDoalog;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final int FEED_SIZE = 5;
@@ -62,6 +63,11 @@ public class UpdateEmployeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_employee);
         ButterKnife.bind(this);
+
+        progressDoalog = new ProgressDialog(UpdateEmployeeActivity.this);
+        progressDoalog.setMessage("Updating...");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
         application = (MyApplication) getApplication();
 
         imgBck.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +119,8 @@ public class UpdateEmployeeActivity extends AppCompatActivity {
 
     private void createEmployee(int itmId, String empName, boolean joiningStatus) {
 
+        progressDoalog.show();
+
         final UpdateTodo feedQuery = UpdateTodo.builder()
                 .itemId(itmId)
                 .isCompleted(joiningStatus)
@@ -138,10 +146,18 @@ public class UpdateEmployeeActivity extends AppCompatActivity {
                 editTextID.setText("");
             }
 
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
             Log.e(TAG, e.getMessage(), e);
         }
     }, uiHandler);

@@ -31,7 +31,7 @@
             android:paddingBottom="12dp"
             android:background="@color/colorPrimary"
             android:layout_height="wrap_content"
-            android:text="Create Employee"
+            android:text="Update Employee"
             android:textSize="20sp"
             />
 

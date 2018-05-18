@@ -1,6 +1,7 @@
 package com.pandodev.prixmdemo;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,6 +38,7 @@ public class GetListActivity extends AppCompatActivity {
     private static final int FEED_SIZE = 5;
 
 
+
     MyApplication application;
     ViewGroup content;
     ProgressBar progressBar;
@@ -51,6 +53,9 @@ public class GetListActivity extends AppCompatActivity {
     @BindView(R.id.imgBck)
     ImageView imgBck;
 
+
+    ProgressDialog progressDoalog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,11 @@ public class GetListActivity extends AppCompatActivity {
         employeeListAdapter = new EmployeeListAdapter(this);
         chatRecycleview.setAdapter(employeeListAdapter);
         chatRecycleview.setLayoutManager(new LinearLayoutManager(this));
+
+
+        progressDoalog = new ProgressDialog(GetListActivity.this);
+        progressDoalog.setMessage("Please Wait...");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 
         imgBck.setOnClickListener(new View.OnClickListener() {
@@ -79,15 +89,29 @@ public class GetListActivity extends AppCompatActivity {
         public void onResponse(@Nonnull Response<MyTestData.Data> response) {
             Log.e("Response", "" + response.data().getTodo());
             employeeListAdapter.setFeed(response.data().getTodo());
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
             Log.e(TAG, e.getMessage(), e);
         }
     }, uiHandler);
 
     private void fetchFeed() {
+
+
+
+        progressDoalog.show();
+
+
         final MyTestData feedQuery = MyTestData.builder()
                 .build();
         githuntFeedCall = application.apolloClient()

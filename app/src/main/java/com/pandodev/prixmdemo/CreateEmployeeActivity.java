@@ -1,5 +1,6 @@
 package com.pandodev.prixmdemo;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 
 public class CreateEmployeeActivity extends AppCompatActivity {
 
-
+    ProgressDialog progressDoalog;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -65,6 +66,14 @@ public class CreateEmployeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_employee);
         ButterKnife.bind(this);
+
+
+
+        progressDoalog = new ProgressDialog(CreateEmployeeActivity.this);
+        progressDoalog.setMessage("Creating...");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
 
         application = (MyApplication) getApplication();
 
@@ -108,6 +117,8 @@ public class CreateEmployeeActivity extends AppCompatActivity {
 
     private void createEmployee(String empName, boolean joiningStatus) {
         int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        progressDoalog.show();
+
         final CreateTodo feedQuery = CreateTodo.builder()
                 .id(unique_id)
                 .isCompleted(joiningStatus)
@@ -131,11 +142,18 @@ public class CreateEmployeeActivity extends AppCompatActivity {
                 Toast.makeText(CreateEmployeeActivity.this, "Employee Created Successfully !", 5000).show();
                 editTextName.setText("");
             }
-
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
         }
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
+            if ( progressDoalog.isShowing())
+            {
+                progressDoalog.dismiss();
+            }
             Log.e(TAG, e.getMessage(), e);
         }
     }, uiHandler);
